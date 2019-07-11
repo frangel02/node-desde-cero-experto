@@ -1,20 +1,19 @@
 var express = require('express');
 var app = express();
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public'));
 
-/*app.get('/', (req, res) => {
+//express HBS engine
+app.set('view engine' , 'hbs');
 
+app.get('/', (req, res) => {
 
-    let salida = {
-        nombre: 'Fernando',
-        edad: 32,
-        url: req.url
-    }
-
-    res.send(salida);
+    res.render('home',{
+        nombre: 'Frangel',
+        anio: new Date().getFullYear()
+    });
 });
-*/
+
 app.listen(3000, () => {
     console.log('Escuchando peticiones en el puerto 3000');
 });
