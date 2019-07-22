@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const Usuario = require('../models/usuario');
 
 app.get('/usuario', function(req, res) {
     res.json('get Usuario LOCAL!!!');
@@ -9,18 +10,28 @@ app.post('/usuario', function(req, res) {
 
     let body = req.body;
 
-    if (body.nombre === undefined) {
+    let usuario = new Usuario({
+        nombre: body.nombre,
+        email: body.email,
+        password: body.password,
+        role: body.role
+    });
 
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-        });
+    usuario.save((err, usuarioDB) => {
 
-    } else {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
         res.json({
-            persona: body
-        });
-    }
+            ok: true,
+            usuario: usuarioDB
+        })
+
+    });
 
 });
 
