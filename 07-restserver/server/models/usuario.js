@@ -15,7 +15,7 @@ let usuarioSchema = new Schema({
     },
     email: {
         type: String,
-        unique:true,
+        unique: true,
         required: [true, 'El email es necesario']
     },
     password: {
@@ -41,6 +41,15 @@ let usuarioSchema = new Schema({
     } //boolean
 
 });
-usuarioSchema.plugin(uniqueValidator,{message:'{PATH}'});
+
+usuarioSchema.methods.toJSON = function() {
+    let user = this;
+    let userObject = user.toObject();
+    delete userObject.password;
+
+    return userObject;
+}
+
+usuarioSchema.plugin(uniqueValidator, { message: '{PATH}' });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
