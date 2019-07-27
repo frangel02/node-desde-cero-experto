@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
+const _=require('underscore');
+
 const Usuario = require('../models/usuario');
 
 app.get('/usuario', function(req, res) {
@@ -39,7 +41,16 @@ app.post('/usuario', function(req, res) {
 app.put('/usuario/:id', function(req, res) {
 
     let id = req.params.id;
-    let body = req.body;
+    let body = _.pick( req.body, ['nombre','email','img','role','estado'] );
+
+
+    
+    /* ######################
+    otra forma
+    //delete body.password;
+    //delete body.google;
+     *#######################
+    */
 
     Usuario.findById(id, body,(err,usuarioDB)=>{
 
