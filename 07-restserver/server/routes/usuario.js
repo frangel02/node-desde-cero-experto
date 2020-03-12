@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt');
 const _= require('underscore');
 
 const Usuario = require('../models/usuario');
+const { verifyToken } = require('../middleware/authenticacion');
 
 
-
-app.get('/usuario', function(req, res) {
+app.get('/usuario', verifyToken, function(req, res) {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -32,7 +32,7 @@ app.get('/usuario', function(req, res) {
                     res.json({
                         ok:true,
                         usuarios,
-                        cuatos: conteo
+                        cuantos: conteo
     
                     })
                 })
