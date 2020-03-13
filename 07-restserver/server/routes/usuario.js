@@ -1,11 +1,12 @@
 const express = require('express');
-const app = express();
 const bcrypt = require('bcrypt');
 const _= require('underscore');
 
 const Usuario = require('../models/usuario');
-const { verifyToken } = require('../middleware/authenticacion');
+const { verifyToken, verifyRole_Admin } = require('../middleware/authenticacion');
 
+
+const app = express();
 
 app.get('/usuario', verifyToken, function(req, res) {
 
@@ -43,7 +44,7 @@ app.get('/usuario', verifyToken, function(req, res) {
 
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verifyToken, verifyRole_Admin], function(req, res) {
 
     let body = req.body;
 
@@ -72,7 +73,7 @@ app.post('/usuario', function(req, res) {
 
 });
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verifyToken, verifyRole_Admin], function(req, res) {
 
     let id = req.params.id;
     let body = _.pick( req.body, ['nombre','email','img','role','estado'] );
@@ -86,7 +87,7 @@ app.put('/usuario/:id', function(req, res) {
      *#######################
     */
 
-    Usuario.findByIdAndUpdate(id, body, {new:true, runValidators }, (err, usuarioDB)=>{
+    Usuario.findByIdAndUpdate(id, body, {new:true, runValidators : true }, (err, usuarioDB)=>{
 
 
         if (err) {
@@ -106,7 +107,7 @@ app.put('/usuario/:id', function(req, res) {
     
 });
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verifyToken, verifyRole_Admin], function(req, res) {
 
     let id = req.params.id;
 

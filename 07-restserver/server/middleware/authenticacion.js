@@ -17,7 +17,9 @@ let verifyToken = (req, res, next) =>{
 
             return res.status(401).json({
                 ok:false,
-                err
+                err: {
+                    message: 'Invalid Token'
+                }
             });
         
         }
@@ -29,6 +31,38 @@ let verifyToken = (req, res, next) =>{
     
 };
 
+//=======================
+// Verify ROLE ADMIN
+//=======================
+
+let verifyRole_Admin = (req, res, next) =>{
+
+
+
+    let usuario = req.usuario;
+
+    if(usuario.role === 'ADMIN_ROLE'){  
+        
+        next();
+
+    }else{
+    
+
+     return res.json({
+            ok:false,
+            err: {
+                message: 'The User has not a role administrator'
+            }
+        });
+
+    }
+    
+    
+
+
+}
+
 module.exports = {
-    verifyToken
+    verifyToken,
+    verifyRole_Admin
 }
